@@ -15,6 +15,9 @@ public class Book {
     private String filePath;
 
 
+    private String coverPath;
+
+
     private String author;
     private String price;
     @Enumerated(EnumType.STRING)
@@ -25,19 +28,28 @@ public class Book {
     private User borrower;
 
 
-    public Book(String name, String filePath, String author, String price, User borrower, BookStatus status) {
+    public Book(String name, String filePath, String coverPath, String author, String price, BookStatus status, User borrower) {
         this.name = name;
         this.filePath = filePath;
+        this.coverPath = coverPath;
         this.author = author;
         this.price = price;
-        this.borrower = borrower;
         this.status = status;
+        this.borrower = borrower;
     }
 
 
     public Book() {
     }
 
+
+    public int getId() {
+        return Id;
+    }
+
+    public void setId(int id) {
+        Id = id;
+    }
 
     public String getName() {
         return name;
@@ -55,12 +67,12 @@ public class Book {
         this.filePath = filePath;
     }
 
-    public String getPrice() {
-        return price;
+    public String getCoverPath() {
+        return coverPath;
     }
 
-    public void setPrice(String price) {
-        this.price = price;
+    public void setCoverPath(String coverPath) {
+        this.coverPath = coverPath;
     }
 
     public String getAuthor() {
@@ -69,6 +81,14 @@ public class Book {
 
     public void setAuthor(String author) {
         this.author = author;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
     }
 
     public BookStatus getStatus() {
@@ -85,13 +105,5 @@ public class Book {
 
     public void setBorrower(User borrower) {
         this.borrower = borrower;
-    }
-
-    public int getId() {
-        return Id;
-    }
-
-    public void setId(int id) {
-        Id = id;
     }
 }

@@ -14,7 +14,8 @@
 <nav class="navbar navbar-expand-lg bg-dark">
     <div class="container-fluid">
         <a class="navbar-brand text-white" href="#">BookShop</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -31,7 +32,7 @@
                 </li>
             </ul>
             <div>
-                <a class="nav-link text-white " th:href="@{/books/new}">
+                <a th:if="${isAdmin}" class="nav-link text-white " th:href="@{/books/new}">
                     Add New Book
                 </a>
                 <form th:action="@{/logout}" method="post">
@@ -41,47 +42,48 @@
         </div>
     </div>
 </nav>
-<h1 class="text-center">Books</h1>
-<div class="container">
-    <table class="table table-striped table-bordered">
-        <thead>
-        <tr>
-            <th>Title:</th>
-            <th>Author:</th>
-            <th>Price:</th>
-            <th>Status:</th>
-            <th>Options:</th>
-        </tr>
-        </thead>
-
-
-        <tbody>
-        <tr th:each="book: ${books}">
-            <td th:text="${book.name}"></td>
-            <td th:text="${book.author}"></td>
-            <td th:text="${book.price}"></td>
-            <td th:text="${book.status}"></td>
-            <td>
-                <div style="display: flex; align-items: center; gap: 8px;">
-                    <div th:if="${book.status != BORROWED}">
-                        <form th:action="@{/books/take/{id}(id=${book.id})}" method="post">
-                            <button class="btn btn-success" type="submit">
-                                Take book
+<div th:if="${#lists.isEmpty(books)}">
+    <p>Library is Empty. We apologize </p>
+</div>
+<div th:unless="${#lists.isEmpty(books)}">
+    <h1 class="text-center">Books</h1>
+    <div class="container my-5">
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col" th:each="book : ${books}">
+                <div class="card h-100 shadow-sm">
+                    <img th:src="@{'/uploads/covers/' + ${book.coverPath}}" class="card-img-top" alt="cover"
+                         style="height: 300px; object-fit: cover;">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${book.name}"></h5>
+                        <p class="card-text" th:text="${book.author}"></p>
+                        <p class="text-muted" th:text="${book.price + '₽'}"></p>
+                        <p th:text="${book.status}"
+                            th:style="${book.status == BORROWED} ? 'color: red' : 'color: green'"></p>
+                        <form th:action="@{/books/take/{id}(id=${book.id})}" method="post" style="display:inline">
+                            <button th:if="${book.status!=BORROWED}" type="submit" class="btn btn-success" data-bs-toggle="tooltip" title="Take Book">
+                                Take Book
                             </button>
                         </form>
-                    </div>
-                    <div>
-                        <form th:action="@{/books/delete/{id}(id=${book.id})}" method="post" style="display:inline">
-                            <button type="submit" style="border:none; background:none; padding:0; cursor:pointer; color:red;">
+
+
+                        <form th:if="${isAdmin}" th:action="@{/books/delete/{id}(id = book.id)}">
+                            <button type="submit"
+                                    style="border:none; background:none; padding:0; cursor:pointer; color:red;">
                                 <i class="bi bi-trash-fill" style="font-size: 1.2rem;"></i>
+                            </button>
+                        </form>
+
+
+                        <form th:if="${isAdmin}" th:action="@{/books/update/{id}(id=${book.id})}">
+                            <button type="submit" class="btn btn-warning">
+                                Update info
                             </button>
                         </form>
                     </div>
                 </div>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 

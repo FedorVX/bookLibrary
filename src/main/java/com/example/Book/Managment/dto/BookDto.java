@@ -13,11 +13,15 @@ public class BookDto {
     private String filePath;
 
 
-    public BookDto(String name, String author, String price, String filePath) {
+    private String coverPath;
+
+
+    public BookDto(String name, String author, String price, String filePath, String coverPath) {
         this.name = name;
         this.author = author;
         this.price = price;
         this.filePath = filePath;
+        this.coverPath = coverPath;
     }
 
 
@@ -55,5 +59,13 @@ public class BookDto {
 
     public void setFilePath(String filePath) {
         this.filePath = filePath;
+    }
+
+    public String getCoverPath() {
+        return coverPath;
+    }
+
+    public void setCoverPath(String coverPath) {
+        this.coverPath = coverPath;
     }
 }

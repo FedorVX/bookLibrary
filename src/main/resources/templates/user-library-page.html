@@ -11,35 +11,60 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
 </head>
 <body>
-<div class="container">
-    <div class="display-5 text-center" th:if="${not #lists.isEmpty(user_books)}">My books</div>
-    <div class="display-5 text-center" th:unless="${not #lists.isEmpty(user_books)}">
-        <p class="display-5">While your library is empty</p>
-        <a th:href="@{/books}" class="btn btn-info btn-sm">Add some book</a>
+<nav class="navbar navbar-expand-lg bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand text-white" href="#">BookShop</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link text-white" aria-current="page" th:href="@{/home}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active text-white" th:href="@{/books}">Available books</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link text-white" th:href="@{/my-books}">My Books</a>
+                </li>
+            </ul>
+            <div>
+                <a th:if="${isAdmin}" class="nav-link text-white " th:href="@{/books/new}">
+                    Add New Book
+                </a>
+                <form th:action="@{/logout}" method="post">
+                    <button type="submit" class="btn btn-outline-danger">Logout</button>
+                </form>
+            </div>
+        </div>
     </div>
-    <table th:if="${not #lists.isEmpty(user_books)}" class="table table-bordered">
-        <thead>
-        <tr>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Options</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="book: ${user_books}">
-            <td th:text="${book.name}"></td>
-            <td th:text="${book.author}"></td>
-            <td>
-                <form th:action="@{/my-books/return-book/{id}(id = ${book.id})}" method="post">
-                    <button class="btn btn-outline-danger btn-sm" type="submit">Return book</button>
-                </form>
-                <form th:action="@{/books/download/{id}(id = ${book.id})}">
-                    <button class="btn btn-outline-success btn-sm" type="submit">Read book</button>
-                </form>
-            </td>
-        </tr>
-        </tbody>
-    </table>
+</nav>
+<div th:if="${#lists.isEmpty(user_books)}" class="text-center justify-content-center">
+    <h1 class="display-3">Your library is empty.</h1>
+    <p>Do you want to take a book? <a th:href="@{/books}">Click here</a></p>
+</div>
+<div th:unless="${#lists.isEmpty(user_books)}" class="container my-5">
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+        <div class="col" th:each="book : ${user_books}">
+            <div class="card h-100 shadow-sm">
+                <img th:src="@{'/uploads/covers/' + ${book.coverPath}}" class="card-img-top" alt="cover" style="height: 300px; object-fit: cover;">
+                <div class="card-body">
+                    <h5 class="card-title" th:text="${book.name}">Title</h5>
+                    <p class="card-text" th:text="${book.author}">Author</p>
+                    <p class="text-muted" th:text="${book.price + '₽'}">Price</p>
+                    <a th:href="@{/books/download/{id}(id=${book.id})}" class="btn btn-outline-primary">Download</a>
+                    <form th:action="@{/my-books/return-book/{id}(id=${book.id})}" method="post" style="display:inline">
+                        <button type="submit" style="border:none; background:none; padding:0; cursor:pointer; color:red;" data-bs-toggle="tooltip" title="Return Book">
+                            <i class="bi bi-arrow-return-left" style="font-size: 1.2em;"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ndDqU0Gzau9qJ1lfW4pNLlhNTkCfHzAVBReH9diLvGRem5+R9g2FzA8ZGN954O5Q"

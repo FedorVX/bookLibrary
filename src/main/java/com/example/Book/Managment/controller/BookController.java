@@ -5,6 +5,7 @@ import com.example.Book.Managment.dto.BookDto;
 import com.example.Book.Managment.entity.Book;
 import com.example.Book.Managment.entity.User;
 import com.example.Book.Managment.enums.BookStatus;
+import com.example.Book.Managment.enums.Role;
 import com.example.Book.Managment.exception.BookNotFoundException;
 import com.example.Book.Managment.service.CurrentUserService;
 import com.example.Book.Managment.service.book.BookService;
@@ -46,39 +47,14 @@ public class BookController {
     private CurrentUserService currentUserService;
 
     @GetMapping("/home")
-    public String home(){
+    public String home(Model model){
+        User currentUser = currentUserService.getCurrentUser();
+        model.addAttribute("user", currentUser);
+        boolean isAdmin = currentUser.getRoles().stream().anyMatch(role -> role.getName().equals(Role.ROLE_ADMIN.name()));
+        model.addAttribute("isAdmin", isAdmin);
         return "home";
     }
 
-
-
-
-
-    @GetMapping("/books/new")
-    public String addBookPage(Model model){
-        model.addAttribute("book", new BookDto());
-        return "add-book";
-    }
-
-
-
-    @PostMapping("/books/new")
-    public String saveAddBook(@ModelAttribute("book") BookDto bookDto,
-                             @RequestParam("file") MultipartFile file) throws IOException {
-        Book book = new Book();
-        book.setAuthor(bookDto.getAuthor());
-        book.setName(bookDto.getName());
-        book.setPrice(bookDto.getPrice());
-        book.setStatus(BookStatus.AVAILABLE);
-        String uploadDir = "uploads/books/";
-        Files.createDirectories(Paths.get(uploadDir));
-        String filename = UUID.randomUUID() + "_" + file.getOriginalFilename();
-        Path filePath = Paths.get(uploadDir, filename);
-        Files.copy(file.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-        book.setFilePath(filename);
-        bookService.save(book);
-        return "redirect:/books";
-    }
 
 
     @GetMapping("/books")
@@ -86,6 +62,10 @@ public class BookController {
         List<Book> books = bookService.findAllBooks();
         model.addAttribute("books", books);
         model.addAttribute("BORROWED", BookStatus.BORROWED);
+        User currentUser = currentUserService.getCurrentUser();
+        model.addAttribute("user", currentUser);
+        boolean isAdmin = currentUser.getRoles().stream().anyMatch(role -> role.getName().equals(Role.ROLE_ADMIN.name()));
+        model.addAttribute("isAdmin", isAdmin);
         return "books";
     }
 
@@ -120,6 +100,8 @@ public class BookController {
     }
 
 
+
+
     @PostMapping("/my-books/return-book/{id}")
     public String returnBook(@PathVariable("id") int id){
         Book returnedBook = bookService.findById(id)
@@ -129,7 +111,7 @@ public class BookController {
         returnedBook.setStatus(BookStatus.AVAILABLE);
         returnedBook.setBorrower(null);
         bookService.save(returnedBook);
-        return "redirect:/my-books";
+        return "redirect:/books";
     }
 
 
