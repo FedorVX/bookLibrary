@@ -29,8 +29,7 @@ public class NewBookController {
     @Autowired
     CurrentUserService currentUserService;
 
-    @RequestMapping("/books/new")
-    @PostMapping
+    @PostMapping("/books/new")
     public String addNewBook(@ModelAttribute("book") BookDto bookDto,
                              @RequestParam("file") MultipartFile file,
                              @RequestParam("coverFile") MultipartFile coverFile
@@ -63,7 +62,7 @@ public class NewBookController {
     }
 
 
-    @GetMapping
+    @GetMapping("/books/new")
     public String addNewBook(Model model){
         User currentUser = currentUserService.getCurrentUser();
         model.addAttribute("user", currentUser);

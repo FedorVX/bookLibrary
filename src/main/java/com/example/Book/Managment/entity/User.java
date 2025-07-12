@@ -32,6 +32,13 @@ public class User {
     private List<Book> userBooks = new ArrayList<>();
 
 
+    private String avatarURL;
+
+
+    @OneToMany(mappedBy = "sender")
+    private List<BookReview> userReviews = new ArrayList<>();
+
+
     public String getName() {
         return name;
     }
@@ -76,11 +83,12 @@ public class User {
     public User() {
     }
 
-    public User(String name, String username, String password) {
+    public User(String name, String username, String password, String avatarURL) {
         this.name = name;
         this.username = username;
         this.password = password;
         this.userBooks = new ArrayList<>();
+        this.avatarURL = avatarURL;
     }
 
 
@@ -90,5 +98,22 @@ public class User {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+
+    public String getAvatarURL() {
+        return avatarURL;
+    }
+
+    public void setAvatarURL(String avatarURL) {
+        this.avatarURL = avatarURL;
+    }
+
+    public List<BookReview> getUserReviews() {
+        return userReviews;
+    }
+
+    public void setUserReviews(List<BookReview> userReviews) {
+        this.userReviews = userReviews;
     }
 }

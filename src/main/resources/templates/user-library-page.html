@@ -55,8 +55,9 @@
                     <h5 class="card-title" th:text="${book.name}">Title</h5>
                     <p class="card-text" th:text="${book.author}">Author</p>
                     <p class="text-muted" th:text="${book.price + '₽'}">Price</p>
+                    <a th:href="@{/review/add/{id}(id=${book.id})}" class="btn btn-info">Add Review</a>
                     <a th:href="@{/books/download/{id}(id=${book.id})}" class="btn btn-outline-primary">Download</a>
-                    <form th:action="@{/my-books/return-book/{id}(id=${book.id})}" method="post" style="display:inline">
+                    <form th:action="@{/my-books/return-book/{id}(id=${book.id})}" method="post" style="display:inline;">
                         <button type="submit" style="border:none; background:none; padding:0; cursor:pointer; color:red;" data-bs-toggle="tooltip" title="Return Book">
                             <i class="bi bi-arrow-return-left" style="font-size: 1.2em;"></i>
                         </button>

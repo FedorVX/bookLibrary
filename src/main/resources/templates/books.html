@@ -59,7 +59,8 @@
                         <p class="text-muted" th:text="${book.price + '₽'}"></p>
                         <p th:text="${book.status}"
                             th:style="${book.status == BORROWED} ? 'color: red' : 'color: green'"></p>
-                        <form th:action="@{/books/take/{id}(id=${book.id})}" method="post" style="display:inline">
+                        <a th:href="@{/review/{id}(id=${book.id})}" class="btn btn-info">Review</a>
+                        <form th:action="@{/books/take/{id}(id=${book.id})}" method="post" style="display:inline;">
                             <button th:if="${book.status!=BORROWED}" type="submit" class="btn btn-success" data-bs-toggle="tooltip" title="Take Book">
                                 Take Book
                             </button>

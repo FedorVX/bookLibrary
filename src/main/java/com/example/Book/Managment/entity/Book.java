@@ -4,6 +4,8 @@ package com.example.Book.Managment.entity;
 import com.example.Book.Managment.enums.BookStatus;
 import jakarta.persistence.*;
 
+import java.util.List;
+
 @Entity
 public class Book {
 
@@ -26,6 +28,9 @@ public class Book {
     @ManyToOne
     @JoinColumn(name="user_id")
     private User borrower;
+
+    @OneToMany(mappedBy = "book")
+    private List<BookReview> reviews;
 
 
     public Book(String name, String filePath, String coverPath, String author, String price, BookStatus status, User borrower) {

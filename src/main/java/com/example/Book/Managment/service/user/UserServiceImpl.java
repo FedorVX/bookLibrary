@@ -22,4 +22,10 @@ public class UserServiceImpl implements UserService{
     public void save(User user) {
         userRepository.save(user);
     }
+
+
+    @Override
+    public Optional<User> findById(int id) {
+        return userRepository.findById(id);
+    }
 }
